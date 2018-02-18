@@ -17,18 +17,14 @@ export class MapComponent implements OnInit {
   web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/UiFZYgJw80AI7LbKtG7o:8545"));
   lat: number = 51.0486;
   lng: number = -114.0708;
+  locPoints = new Array<LocPoint>();
+  locPoint: LocPoint;
   address:string;
   constructor(private db: AngularFireDatabase) { }
 
   ngOnInit() {
     this.nodeObservable = this.getNodes('/');
-    this.nodeObservable.subscribe(val => this.getData(val));
-    if(this.web3.isConnected()){
-      console.log(this.web3);
-    }
-    else{
-      console.log("no");
-    }     
+    this.nodeObservable.subscribe(val => this.getContract(val));//this.getData(val)); 
   }
 
   getNodes(listPath): Observable<any[]> {
@@ -38,7 +34,16 @@ export class MapComponent implements OnInit {
   getData(val){
     this.getContract(val).then(node => {
       this.getSensorData(node).then((data) => {
-          console.log(data)
+          this.locPoint = new LocPoint();
+          this.locPoint.date = new Date(0);
+          this.locPoint.date.setUTCSeconds(data[5].c);
+          this.locPoint.lng = data[0].s*(data[0].c / 1000000);
+          this.locPoint.lat = data[1].s*(data[1].c / 1000000);
+          this.locPoint.temperature = data[2].s*(data[2].c/1000);
+          this.locPoint.humidity = data[3].c;
+          this.locPoint.warning = data[4].c;
+          this.locPoint.address = val[0].address;
+          this.locPoints.push(this.locPoint);
       }).catch((err) => {
           console.log(err)
       })
@@ -51,7 +56,9 @@ export class MapComponent implements OnInit {
     return new Promise((resolve, reject) => {
         this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
         var contract = this.web3.eth.contract(JSON.parse(val[0].ABI));
+        console.log(contract);
         var blokfirenode = contract.at(String(val[0].address));
+        console.log(blokfirenode);
         if (blokfirenode) {
             resolve(blokfirenode)
         } else {

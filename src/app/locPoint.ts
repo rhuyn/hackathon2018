@@ -1,5 +1,9 @@
 export class LocPoint {
     lat: number;
     lng: number;
-    description: string;
+    temperature: number;
+    humidity: number;
+    warning: number;
+    date: Date;
+    address:string;
 }
