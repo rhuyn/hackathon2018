@@ -21,7 +21,7 @@ import { AboutComponent } from './about/about.component';
     HeaderComponent,
     MapComponent,
     FooterComponent,
-    AboutComponent
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
