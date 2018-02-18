@@ -98,7 +98,6 @@ export class MapComponent implements OnInit {
   
   getContract(val) {
     return new Promise((resolve, reject) => {
-      console.log(val.address);
         var contract = this.web3.eth.contract(JSON.parse(val.ABI));
         var blokfirenode = contract.at(String(val.address));
         if (blokfirenode) {
