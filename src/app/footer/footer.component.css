@@ -1,0 +1,9 @@
+.container{
+    font-family: Impact, Charcoal, sans-serif;
+    height: 8vh;  
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
