@@ -6,4 +6,5 @@ export class LocPoint {
     warning: number;
     date: Date;
     address:string;
+    warningImg:string;
 }

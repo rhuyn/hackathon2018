@@ -1,8 +1,9 @@
 <script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
 <div class="container">
   <agm-map [latitude]="lat" [longitude]="lng">
-    <agm-marker *ngFor="let loc of locPoints" [latitude]="loc.lat" [longitude]="loc.lng">
+    <agm-marker *ngFor="let loc of locPoints" [latitude]="loc.lat" [longitude]="loc.lng" [iconUrl]='loc.warningImg'>
       <agm-info-window> 
+        <div> Warning Level: {{loc.warning}} </div>
         <div> Humidity:{{loc.humidity}} </div>
         <div> Temperature: {{loc.temperature}} </div>
         <div> Last Updated: {{loc.date}}</div>
