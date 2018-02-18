@@ -24,7 +24,7 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.nodeObservable = this.getNodes('/');
-    this.nodeObservable.subscribe(val => this.getContract(val));//this.getData(val)); 
+    this.nodeObservable.subscribe(val => this.getData(val)); 
   }
 
   getNodes(listPath): Observable<any[]> {
@@ -32,33 +32,35 @@ export class MapComponent implements OnInit {
   }
 
   getData(val){
-    this.getContract(val).then(node => {
-      this.getSensorData(node).then((data) => {
-          this.locPoint = new LocPoint();
-          this.locPoint.date = new Date(0);
-          this.locPoint.date.setUTCSeconds(data[5].c);
-          this.locPoint.lng = data[0].s*(data[0].c / 1000000);
-          this.locPoint.lat = data[1].s*(data[1].c / 1000000);
-          this.locPoint.temperature = data[2].s*(data[2].c/1000);
-          this.locPoint.humidity = data[3].c;
-          this.locPoint.warning = data[4].c;
-          this.locPoint.address = val[0].address;
-          this.locPoints.push(this.locPoint);
+    var inter = setInterval(()=>{
+      this.locPoints = new Array<LocPoint>();
+      this.getContract(val).then(node => {
+        this.getSensorData(node).then((data) => {
+          console.log(data);
+            this.locPoint = new LocPoint();
+            this.locPoint.date = new Date(0);
+            this.locPoint.date.setUTCSeconds(data[5].c);
+            this.locPoint.lng = data[0].s*(data[0].c / 1000000);
+            this.locPoint.lat = data[1].s*(data[1].c / 1000000);
+            this.locPoint.temperature = data[2].s*(data[2].c/1000);
+            this.locPoint.humidity = data[3].c;
+            this.locPoint.warning = data[4].c;
+            this.locPoint.address = val[0].address;
+            this.locPoints.push(this.locPoint);
+        }).catch((err) => {
+            console.log(err)
+        })
       }).catch((err) => {
-          console.log(err)
+        console.log(err)
       })
-    }).catch((err) => {
-      console.log(err)
-    })
+    }, 10000);
   }
   
   getContract(val) {
     return new Promise((resolve, reject) => {
         this.web3.eth.defaultAccount = this.web3.eth.accounts[0];
         var contract = this.web3.eth.contract(JSON.parse(val[0].ABI));
-        console.log(contract);
         var blokfirenode = contract.at(String(val[0].address));
-        console.log(blokfirenode);
         if (blokfirenode) {
             resolve(blokfirenode)
         } else {

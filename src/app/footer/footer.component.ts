@@ -11,5 +11,5 @@ export class FooterComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  //    this._router.navigateByUrl('/about');
 }
