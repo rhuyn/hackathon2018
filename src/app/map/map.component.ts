@@ -15,16 +15,19 @@ export class MapComponent implements OnInit {
   
   nodeObservable: Observable<any[]>;
   web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/UiFZYgJw80AI7LbKtG7o:8545"));
-  lat: number = 51.0486;
-  lng: number = -114.0708;
+  lat: number = 52.52;
+  lng: number = 13.4708;
   locPoints = new Array<LocPoint>();
   locPoint: LocPoint;
   address:string;
+  inter:any;
   constructor(private db: AngularFireDatabase) { }
 
   ngOnInit() {
     this.nodeObservable = this.getNodes('/');
-    this.nodeObservable.subscribe(val => this.getData(val)); 
+    this.nodeObservable.subscribe(val => {
+      this.getData(val);
+    }); 
   }
 
   getNodes(listPath): Observable<any[]> {
@@ -32,28 +35,34 @@ export class MapComponent implements OnInit {
   }
 
   getData(val){
+    this.getDataLoop(val);
     var inter = setInterval(()=>{
       this.locPoints = new Array<LocPoint>();
-      this.getContract(val).then(node => {
-        this.getSensorData(node).then((data) => {
-          console.log(data);
-            this.locPoint = new LocPoint();
-            this.locPoint.date = new Date(0);
-            this.locPoint.date.setUTCSeconds(data[5].c);
-            this.locPoint.lng = data[0].s*(data[0].c / 1000000);
-            this.locPoint.lat = data[1].s*(data[1].c / 1000000);
-            this.locPoint.temperature = data[2].s*(data[2].c/1000);
-            this.locPoint.humidity = data[3].c;
-            this.locPoint.warning = data[4].c;
-            this.locPoint.address = val[0].address;
-            this.locPoints.push(this.locPoint);
-        }).catch((err) => {
-            console.log(err)
-        })
-      }).catch((err) => {
-        console.log(err)
-      })
+      this.getDataLoop(val);
     }, 10000);
+  }
+
+  getDataLoop(val){
+    this.getContract(val).then(node => {
+      this.getSensorData(node).then((data) => {
+        console.log(data);
+          this.locPoint = new LocPoint();
+          this.locPoint.date = new Date(0);
+          this.locPoint.date.setUTCSeconds(data[5].c);
+          this.locPoint.lng = data[0].s*(data[0].c / 1000000);
+          this.locPoint.lat = data[1].s*(data[1].c / 1000000);
+          this.locPoint.temperature = data[2].s*(data[2].c/1000);
+          this.locPoint.humidity = data[3].c;
+          this.locPoint.warning = data[4].c;
+          this.locPoint.address = "https://rinkeby.etherscan.io/address/"+val[0].address;
+          this.locPoints.push(this.locPoint);
+          console.log(this.locPoints);
+      }).catch((err) => {
+          console.log(err)
+      })
+    }).catch((err) => {
+      console.log(err)
+    })
   }
   
   getContract(val) {

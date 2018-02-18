@@ -13,3 +13,16 @@ agm-map {
 .section{
   text-align: center;
 }
+.section-left{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.section-right{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.info-container{
+  width:40%;
+}
