@@ -8,6 +8,13 @@
     box-shadow: 5px 5px 10px #888888;
 
 }
+.title-button{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
 .icon{
     width: 10vh;
     height: 10vh;
