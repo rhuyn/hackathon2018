@@ -33,3 +33,9 @@ agm-map {
   display: flex;
   flex-direction: row;
 }
+.imgLeft{
+  width: 50%;
+}
+.imgRight{
+  width:50%;
+}

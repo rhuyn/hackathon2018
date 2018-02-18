@@ -51,6 +51,7 @@ export class MapComponent implements OnInit {
     for( var i = 0; i < val.length; i++){
       this.getContract(val[i]).then(node => {
         this.getSensorData(node).then((data) => {
+          console.log(data);
             this.locPoint = new LocPoint();
             this.locPoint.date = new Date(0);
             this.locPoint.date.setUTCSeconds(data[5].c);
@@ -58,27 +59,28 @@ export class MapComponent implements OnInit {
             this.locPoint.lat = data[1].s*(data[1].c / 1000000);
             this.locPoint.temperature = data[2].s*(data[2].c/1000);
             this.locPoint.humidity = data[3].c;
-            this.locPoint.warning = data[4].c;
+            this.locPoint.warning = data[4].c[0];
+            console.log(this.locPoint.warning);
             this.locPoint.address = "https://rinkeby.etherscan.io/address/"+val[this.counter].address;
-            if(this.locPoint.warning = 1){
+            if(this.locPoint.warning == 1){
               this.locPoint.warningImg = "../../assets/icon1.png";
             }
-            else if(this.locPoint.warning = 2){
+            else if(this.locPoint.warning == 2){
               this.locPoint.warningImg = "../../assets/icon2.png";
             }
-            else if(this.locPoint.warning = 3){
+            else if(this.locPoint.warning == 3){
               this.locPoint.warningImg = "../../assets/icon3.png";
             }
-            else if(this.locPoint.warning = 4){
+            else if(this.locPoint.warning ==4){
               this.locPoint.warningImg = "../../assets/icon4.png";
             }
-            else if(this.locPoint.warning = 5){
+            else if(this.locPoint.warning == 5){
               this.locPoint.warningImg = "../../assets/icon5.png";
             }
-            else if(this.locPoint.warning = 6){
+            else if(this.locPoint.warning == 6){
               this.locPoint.warningImg = "../../assets/icon6.png";
             }
-            else if(this.locPoint.warning = 7){
+            else if(this.locPoint.warning == 7){
               this.locPoint.warningImg = "../../assets/icon7.png";
             }
 
